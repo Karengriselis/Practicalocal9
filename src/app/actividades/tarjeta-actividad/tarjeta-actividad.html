@@ -1,0 +1,38 @@
+<article
+  class="tarjeta"
+  [class.destacada]="actividad().destacada"
+  [class.seleccionada]="seleccionada()"
+>
+  <h4>{{ actividad().titulo }}</h4>
+  <p class="prioridad prioridad-{{ actividad().prioridad }}">
+    Prioridad {{ actividad().prioridad }}
+  </p>
+  <p class="estado">{{ etiquetaEstado() }}</p>
+
+  <div class="acciones">
+    <button
+      type="button"
+      [attr.aria-pressed]="seleccionada()"
+      (click)="seleccionCambiada.emit(actividad().id)"
+    >
+      {{ seleccionada() ? 'Quitar selección' : 'Seleccionar' }}
+    </button>
+    <button type="button" (click)="destacadoCambiado.emit(actividad().id)">
+      {{ actividad().destacada ? 'Quitar destacado' : 'Destacar' }}
+    </button>
+    <button
+      type="button"
+      [disabled]="actividad().estado === 'completada'"
+      (click)="avanceSolicitado.emit(actividad().id)"
+    >
+      Avanzar estado
+    </button>
+    <button
+      type="button"
+      [attr.aria-label]="etiquetaEliminar()"
+      (click)="eliminacionSolicitada.emit(actividad().id)"
+    >
+      Eliminar
+    </button>
+  </div>
+</article>

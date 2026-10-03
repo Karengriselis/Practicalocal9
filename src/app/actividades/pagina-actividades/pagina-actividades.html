@@ -1,0 +1,49 @@
+<section class="pagina" aria-labelledby="titulo-pagina">
+  <h2 id="titulo-pagina">Tablero de prioridades</h2>
+
+  @if (seleccionada(); as elegida) {
+    <p class="seleccion">
+      Seleccionada: <strong>{{ elegida.titulo }}</strong> · creada el {{ elegida.creadaEn }}
+    </p>
+  }
+
+  <app-panel-seccion titulo="Resumen">
+    <app-resumen-actividades
+      [total]="total()"
+      [pendientes]="pendientes()"
+      [enProgreso]="enProgreso()"
+      [completadas]="completadas()"
+      [porcentaje]="porcentaje()" />
+  </app-panel-seccion>
+
+  <app-panel-seccion titulo="Buscar y filtrar">
+    <app-filtros-actividades
+      [termino]="termino()"
+      (terminoChange)="cambiarBuscar($event)"
+      [estado]="filtroEstado()"
+      (estadoChange)="cambiarEstado($event)"
+      [prioridad]="filtroPrioridad()"
+      (prioridadChange)="cambiarPrioridad($event)" />
+    <p aria-live="polite">{{ mostradas() }} de {{ total() }} actividades visibles</p>
+  </app-panel-seccion>
+
+  <app-panel-seccion titulo="Actividades">
+    <a acciones routerLink="/actividades/nueva">Nueva actividad</a>
+    @if (cargando()) {
+      <p class="cargando" role="status">Cargando actividades…</p>
+    } @else if (errorCarga()) {
+      <p class="error" role="alert">{{ errorCarga() }}</p>
+      <button type="button" (click)="recargar()">Reintentar</button>
+    }
+    <app-lista-actividades
+      [actividades]="visibles()"
+      [seleccionadaId]="seleccionadaId()"
+      [mensajeVacio]="mensajeVacio()"
+      [hayFiltros]="hayFiltros()"
+      (seleccionCambiada)="seleccionar($event)"
+      (destacadoCambiado)="alternarDestacada($event)"
+      (avanceSolicitado)="avanzarEstado($event)"
+      (eliminacionSolicitada)="eliminar($event)"
+      (limpiezaSolicitada)="limpiarFiltros()" />
+  </app-panel-seccion>
+</section> 
